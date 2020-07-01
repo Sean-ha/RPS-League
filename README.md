@@ -5,3 +5,5 @@
 
 Auto Letterbox and LeanTween are both free assets downloaded from the Unity Asset Store. Auto Letterbox assists in standardizing screen sizes of Android devices, as there are a huge variety of them. It does this through creating black bars on the sides to maintain a single resolution.
 LeanTween is an asset that can be used for tweening objects. It was used to create animations for the UI elements in the game.
+
+Within the assets folder, you will find my code (written in C#) as well as other files essential to the game.
