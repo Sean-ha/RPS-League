@@ -13,7 +13,9 @@ public class BattleManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject rpsButtonsPanel = null;
     [SerializeField] private TextMeshProUGUI timerText = null;
     [SerializeField] private TextMeshProUGUI battleDialogue = null;
-    [SerializeField] private WinLoseFunctions winLoseFunctions = null;
+    [SerializeField] private WinLoseFunctions masterWinLoseFunctions = null;
+    [SerializeField] private WinLoseFunctions otherWinLoseFunctions = null;
+
     [SerializeField] private TextMeshProUGUI roundField = null;
     [SerializeField] private TextMeshProUGUI endOfGameText = null;
     [SerializeField] private GameObject endOfGamePanel = null;
@@ -24,18 +26,20 @@ public class BattleManager : MonoBehaviourPunCallbacks
 
     private GameObject masterPlayer, otherPlayer;
 
-    public static int roundNumber = 1;
+    public static int roundNumber;
     private int timer;
 
-    public static int playerChoice = 0;
+    public static int playerChoice;
 
-    public static int masterChoice = 0, otherChoice = 0;
+    public static int masterChoice, otherChoice;
 
     public static PlayerManager masterPM, otherPM;
 
     public Animator animator;
 
     private Sprite[] rpsSprites;
+
+    private bool gameInProgress;
 
     void Start()
     {
@@ -52,6 +56,12 @@ public class BattleManager : MonoBehaviourPunCallbacks
         }
 
         rpsSprites = Resources.LoadAll<Sprite>("RPSButtons");
+
+        roundNumber = 1;
+        playerChoice = 0;
+        masterChoice = 0;
+        otherChoice = 0;
+        gameInProgress = true;
 
         BeginRound();
     }
@@ -80,7 +90,7 @@ public class BattleManager : MonoBehaviourPunCallbacks
 
     private void DisplayControls()
     {
-        timer = 16;
+        timer = 11;
         roundField.text = "Round " + roundNumber;
 
         // RPS buttons are displayed for user to press
@@ -169,21 +179,23 @@ public class BattleManager : MonoBehaviourPunCallbacks
         if (masterChoice == otherChoice)
         {
             string drawText = "It's a draw. ";
-            winLoseFunctions.drawText = "";
-            int masterDraw = winLoseFunctions.Draw(masterPM);
-            int otherDraw = winLoseFunctions.Draw(otherPM);
+            masterWinLoseFunctions.drawText = "";
+            otherWinLoseFunctions.drawText = "";
 
-            drawText += winLoseFunctions.drawText;
+            int masterDraw = masterWinLoseFunctions.Draw(masterPM);
+            int otherDraw = otherWinLoseFunctions.Draw(otherPM);
+            drawText += masterWinLoseFunctions.drawText + otherWinLoseFunctions.drawText;
+
 
             if (masterDraw != 0)
             {
-                winLoseFunctions.Lose(otherPM.characterID, masterDraw, otherPM, 0);
-                drawText += winLoseFunctions.loseText;
+                otherWinLoseFunctions.Lose(otherPM.characterID, masterDraw, otherPM, 0);
+                drawText += otherWinLoseFunctions.loseText + " ";
             }
             if (otherDraw != 0)
             {
-                winLoseFunctions.Lose(masterPM.characterID, otherDraw, masterPM, 0);
-                drawText += winLoseFunctions.loseText;
+                masterWinLoseFunctions.Lose(masterPM.characterID, otherDraw, masterPM, 0);
+                drawText += masterWinLoseFunctions.loseText;
             }
 
             StartCoroutine(TypeSentence(drawText));
@@ -222,29 +234,29 @@ public class BattleManager : MonoBehaviourPunCallbacks
         if (masterWon)
         {
             winnerName = masterPM.screenName;
-            damageToDeal = winLoseFunctions.Win(masterPM.characterID, masterPM, masterChoice);
+            damageToDeal = masterWinLoseFunctions.Win(masterPM.characterID, masterPM, masterChoice);
 
             battleText = winnerName + " won the round. ";
-            battleText += winLoseFunctions.winText;
+            battleText += masterWinLoseFunctions.winText;
 
             if (damageToDeal != 0)
             {
-                winLoseFunctions.Lose(otherPM.characterID, damageToDeal, otherPM, otherChoice);
-                battleText += " " + winLoseFunctions.loseText;
+                otherWinLoseFunctions.Lose(otherPM.characterID, damageToDeal, otherPM, otherChoice);
+                battleText += " " + otherWinLoseFunctions.loseText;
             }
         }
         else
         {
             winnerName = otherPM.screenName;
-            damageToDeal = winLoseFunctions.Win(otherPM.characterID, otherPM, otherChoice);
+            damageToDeal = otherWinLoseFunctions.Win(otherPM.characterID, otherPM, otherChoice);
 
             battleText = winnerName + " won the round. ";
-            battleText += winLoseFunctions.winText;
+            battleText += otherWinLoseFunctions.winText;
 
             if (damageToDeal != 0)
             {
-                winLoseFunctions.Lose(masterPM.characterID, damageToDeal, masterPM, masterChoice);
-                battleText += " " + winLoseFunctions.loseText;
+                masterWinLoseFunctions.Lose(masterPM.characterID, damageToDeal, masterPM, masterChoice);
+                battleText += " " + masterWinLoseFunctions.loseText;
             }
         }
         StartCoroutine(TypeSentence(battleText));
@@ -254,18 +266,18 @@ public class BattleManager : MonoBehaviourPunCallbacks
     {
         // Simply waits for 8 seconds after the round is over for the players to read the information
         // After 8 seconds, begin the new round (or end the game if it's over).
-        yield return new WaitForSeconds(8);
+        yield return new WaitForSeconds(6);
         masterPM.ready = false;
         otherPM.ready = false;
 
         // If either player is below 0 health, then the game is over.
         if (masterPM.health <= 0 || otherPM.health <= 0)
         {
+            gameInProgress = false;
             // If both players are below 0 health, it is a draw.
             if (masterPM.health <= 0 && otherPM.health <= 0)
             {
                 endOfGameText.text = "DRAW";
-                MainMenuManager.drawCount++;
             }
             else if (masterPM.health <= 0)
             {
@@ -298,7 +310,6 @@ public class BattleManager : MonoBehaviourPunCallbacks
             // Saves won/lost/draw counts to PlayerPrefs
             PlayerPrefs.SetInt("Wins", MainMenuManager.winCount);
             PlayerPrefs.SetInt("Losses", MainMenuManager.loseCount);
-            PlayerPrefs.SetInt("Draws", MainMenuManager.drawCount);
 
             // Fades the end of game panel in.
             CanvasGroup canvasGroup = endOfGamePanel.GetComponent<CanvasGroup>();
@@ -346,16 +357,19 @@ public class BattleManager : MonoBehaviourPunCallbacks
         animator.SetBool("IsOffScreen", false);
     }
 
-    // When your opponent leaves the room, win the game.
+    // When your opponent leaves the room, win the game (only if the game is still in progress).
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        MainMenuManager.winCount++;
-        PlayerPrefs.SetInt("Wins", MainMenuManager.winCount);
+        if(gameInProgress)
+        {
+            MainMenuManager.winCount++;
+            PlayerPrefs.SetInt("Wins", MainMenuManager.winCount);
 
-        // Fades the end of game panel in.
-        endOfGameText.text = "YOU WIN";
-        CanvasGroup canvasGroup = endOfGamePanel.GetComponent<CanvasGroup>();
-        endOfGamePanel.SetActive(true);
-        StartCoroutine(FadePanel(canvasGroup));
+            // Fades the end of game panel in.
+            endOfGameText.text = "YOU WIN";
+            CanvasGroup canvasGroup = endOfGamePanel.GetComponent<CanvasGroup>();
+            endOfGamePanel.SetActive(true);
+            StartCoroutine(FadePanel(canvasGroup));
+        }
     }
 }

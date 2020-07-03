@@ -4,12 +4,26 @@ using UnityEngine;
 
 public class WinLoseFunctions : MonoBehaviour
 {
-    public string winText = "";
-    public string loseText = "";
-    public string drawText = "";
+    public string winText;
+    public string loseText;
+    public string drawText;
 
-    private int scholarCount = 0;
-    private int executionerCount = 0;
+    public static int scholarCount;
+    public static int executionerCount;
+    public static bool phoenixRevived;
+    public static int creatureCount;
+
+    private void Start()
+    {
+        winText = "";
+        loseText = "";
+        drawText = "";
+
+        scholarCount = 0;
+        executionerCount = 0;
+        phoenixRevived = false;
+        creatureCount = 0;
+    }
 
     // Each id corresponds to a different character's win function.
     // A PlayerManager is passed in so the method may edit its values
@@ -20,21 +34,25 @@ public class WinLoseFunctions : MonoBehaviour
         string screenName = winnerManager.screenName;
         winText = "";
 
-        // Mysterious Creature
-        if(id == 1)
+        // Creature
+        if (id == 1)
         {
-            if(BattleManager.roundNumber % 2 == 0)
+            creatureCount++;
+            // If you used scissors and you have more than 1 stack of TERROR
+            if (winnerChoice == 3)
             {
-                winText = screenName + " deals 0 damage, as it is an even round.";
-                return 0;
+                winnerManager.health += creatureCount;
+                if (winnerManager.health > 10)
+                {
+                    winnerManager.health = 10;
+                }
+                winText = screenName + " heals for " + creatureCount + " health.";
+                creatureCount = 0;
             }
-            else
-            {
-                return 2;
-            }
+            return 2;
         }
         // Angel
-        else if(id == 2)
+        else if (id == 2)
         {
             if (winnerChoice == 2)
             {
@@ -49,67 +67,67 @@ public class WinLoseFunctions : MonoBehaviour
             return 2;
         }
         // Wretch
-        else if(id == 3)
+        else if (id == 3)
         {
-            if(winnerChoice == 1)
+            if (winnerChoice == 1)
             {
                 winText = screenName + " deals +2 damage for winning with ROCK.";
                 return 4;
             }
             else
             {
-                winText = screenName + " +1 damage.";
+                winText = screenName + " deals +1 damage.";
                 return 3;
             }
         }
         // Ant
-        else if(id == 4)
+        else if (id == 4)
         {
             winText = screenName + " deals double damage.";
             return 4;
         }
         // Crimson
-        else if(id == 5)
+        else if (id == 5)
         {
-            if(winnerChoice != 3)
+            if (winnerChoice != 3)
             {
-                winText = screenName + " loses 1 health to deal 1 more damage.";
+                winText = screenName + " loses 1 health to deal +2 damage.";
                 winnerManager.health -= 1;
-                return 3;
+                return 4;
             }
             else
             {
-                winText = screenName + " deals +1 damage because it used SCISSORS.";
-                return 3;
+                winText = screenName + " deals +2 damage because it used SCISSORS.";
+                return 4;
             }
         }
         // Phoenix
-        else if(id == 6)
+        else if (id == 6)
         {
             return 2;
         }
         // Fairy
-        else if(id == 7)
+        else if (id == 7)
         {
             winText = screenName + "'s health is set to 5 for winning.";
             winnerManager.health = 5;
             return 2;
         }
         // Protagonist
-        else if(id == 8)
+        else if (id == 8)
         {
             return 2;
         }
         // Nurse
-        else if(id == 9)
+        else if (id == 9)
         {
-            if(winnerChoice == 2)
+            if (winnerChoice == 2)
             {
                 winText = screenName + " heals 1 health for winning with PAPER.";
                 winnerManager.health += 1;
                 return 2;
             }
-            else if(winnerChoice == 3)
+            else if (winnerChoice == 3)
             {
                 winText = screenName + " deals +1 damage for winning with SCISSORS.";
                 return 3;
@@ -117,30 +135,30 @@ public class WinLoseFunctions : MonoBehaviour
             return 2;
         }
         // Scholar
-        else if(id == 10)
+        else if (id == 10)
         {
-            if(winnerChoice == 2)
+            if (winnerChoice == 2)
             {
                 scholarCount++;
-                if(scholarCount == 1)
+                if (scholarCount == 1)
                 {
                     winText = screenName + " has 1 stack of BRAIN POWER.";
                 }
-                else if(scholarCount == 2)
+                else if (scholarCount == 2)
                 {
                     winText = screenName + " has 2 stacks of BRAIN POWER.";
                 }
-                else if(scholarCount == 3)
+                else if (scholarCount == 3)
                 {
                     winText = screenName + " has 3 stacks of BRAIN POWER! He unleashes a devastating blow!";
                     scholarCount = 0;
-                    return 8;
+                    return 999;
                 }
             }
             return 2;
         }
         // Executioner
-        else if(id == 11)
+        else if (id == 11)
         {
             executionerCount++;
             winText = screenName + " has " + executionerCount + " power.";
@@ -157,21 +175,18 @@ public class WinLoseFunctions : MonoBehaviour
         loseText = "";
         string screenName = loserManager.screenName;
 
-        // Mysterious Creature
-        if(id == 1)
+        // Creature
+        if (id == 1)
         {
-            if(BattleManager.roundNumber % 2 == 1)
-            {
-                loseText = screenName + " takes 0 damage, as it is an odd round.";
-                return;
-            }
+            creatureCount++;
+            loseText = screenName + " is at " + creatureCount + "stacks of TERROR.";
         }
         // Ant
-        else if(id == 4)
+        else if (id == 4)
         {
-            if(loserChoice == 3)
+            if (loserChoice == 3)
             {
-                loseText = screenName + " lost against ROCK and dies.";
+                loseText = screenName + " lost against ROCK and got squished.";
                 loserManager.health = 0;
                 return;
             }
@@ -182,12 +197,16 @@ public class WinLoseFunctions : MonoBehaviour
         loseText = loserManager.screenName + " takes " + damageToTake + " damage.";
 
         // Phoenix
-        if(id == 6)
+        if (id == 6)
         {
-            if(loserManager.health == 0)
+            if (loserManager.health <= 0)
             {
-                winText = screenName + " is at 0 health, and is gloriously reborn with 1 health.";
-                loserManager.health = 1;
+                if (!phoenixRevived)
+                {
+                    winText = screenName + " is GLORIOUSLY REBORN with 5 health remaining.";
+                    loserManager.health = 5;
+                    phoenixRevived = true;
+                }
             }
         }
     }
@@ -195,10 +214,16 @@ public class WinLoseFunctions : MonoBehaviour
     // Called upon a draw happening. Only Protagonists (id=8) have any functionality in a draw.
     public int Draw(PlayerManager playerPM)
     {
-        if(playerPM.characterID == 8)
+        // Creature
+        if(playerPM.characterID == 1)
         {
-            drawText += playerPM.screenName + " deals 2 damage. ";
-            return 2;
+            creatureCount++;
+            drawText += playerPM.screenName + " has " + creatureCount + " stacks of TERROR. ";
+        }
+        else if (playerPM.characterID == 8)
+        {
+            drawText += playerPM.screenName + " deals 1 damage. ";
+            return 1;
         }
         return 0;
     }

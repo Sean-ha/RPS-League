@@ -515,7 +515,8 @@ MonoBehaviour:
   rpsButtonsPanel: {fileID: 853429858}
   timerText: {fileID: 693665150}
   battleDialogue: {fileID: 1648838270}
-  winLoseFunctions: {fileID: 391079360}
+  masterWinLoseFunctions: {fileID: 391079360}
+  otherWinLoseFunctions: {fileID: 1439960353}
   roundField: {fileID: 1477148543}
   endOfGameText: {fileID: 2146870417}
   endOfGamePanel: {fileID: 928818442}
@@ -964,7 +965,7 @@ GameObject:
   - component: {fileID: 391079361}
   - component: {fileID: 391079360}
   m_Layer: 0
-  m_Name: WinLoseFunctions
+  m_Name: MasterWinLoseFunctions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1483,7 +1484,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &853429858
 GameObject:
@@ -6825,6 +6826,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1356367249}
   m_CullTransparentMesh: 0
+--- !u!1 &1439960352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1439960354}
+  - component: {fileID: 1439960353}
+  m_Layer: 0
+  m_Name: OtherWinLoseFunctions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1439960353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439960352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be82825db0e40984d98068ca889a0e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  winText: 
+  loseText: 
+  drawText: 
+--- !u!4 &1439960354
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439960352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 481.67902, y: 449.52197, z: -61.664516}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1477148541
 GameObject:
   m_ObjectHideFlags: 0

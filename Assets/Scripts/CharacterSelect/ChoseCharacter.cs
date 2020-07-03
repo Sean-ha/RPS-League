@@ -32,7 +32,8 @@ public class ChoseCharacter : MonoBehaviour
     {
         SetDescriptionPanel();
         characterImage.GetComponent<Image>().sprite = characterSpriteList[1];
-        abilityDescription.text = "You cannot take damage on odd rounds.\nYou cannot deal damage on even rounds.";
+        abilityDescription.text = "Every round, acquire 1 stack of TERROR.\nUpon winning with SCISSORS, consume all of your " +
+            "stacks and heal yourself for that amount.\nThis cannot overheal.";
         characterName.text = "Creature";
 
         selectCharacterButton.GetComponent<Button>().onClick.AddListener(Char1);
@@ -72,8 +73,8 @@ public class ChoseCharacter : MonoBehaviour
     {
         SetDescriptionPanel();
         characterImage.GetComponent<Image>().sprite = characterSpriteList[5];
-        abilityDescription.text = "Upon winning, deal 1 damage to yourself and +2 damage to your opponent.\nIf you win" +
-            " using SCISSORS, don't do any damage to yourself.";
+        abilityDescription.text = "Upon winning, take 2 damage to deal +2 damage.\n" +
+            "If you win with SCISSORS, do not damage yourself.";
         characterName.text = "Crimson";
 
         selectCharacterButton.GetComponent<Button>().onClick.AddListener(Char5);
@@ -83,8 +84,7 @@ public class ChoseCharacter : MonoBehaviour
     {
         SetDescriptionPanel();
         characterImage.GetComponent<Image>().sprite = characterSpriteList[6];
-        abilityDescription.text = "Upon reaching exactly 0 health, gloriously revive with 1 health remaining.\n" +
-            "You will lose if your health goes below 0.";
+        abilityDescription.text = "The first time you go below 0 health, revive with 5 health remaining.";
         characterName.text = "Phoenix";
 
         selectCharacterButton.GetComponent<Button>().onClick.AddListener(Char6);
@@ -104,7 +104,7 @@ public class ChoseCharacter : MonoBehaviour
     {
         SetDescriptionPanel();
         characterImage.GetComponent<Image>().sprite = characterSpriteList[8];
-        abilityDescription.text = "Deal 2 damage to your opponent if you draw.";
+        abilityDescription.text = "Deal 1 damage to your opponent if you draw.";
         characterName.text = "Protagonist";
 
         selectCharacterButton.GetComponent<Button>().onClick.AddListener(Char8);
@@ -124,8 +124,8 @@ public class ChoseCharacter : MonoBehaviour
     {
         SetDescriptionPanel();
         characterImage.GetComponent<Image>().sprite = characterSpriteList[10];
-        abilityDescription.text = "Gain a stack of BRAIN POWER if you win using PAPER.\nUpon reaching 3 stacks, deal" +
-            " +6 damage.";
+        abilityDescription.text = "Gain a stack of BRAIN POWER if you win using PAPER.\nUpon reaching 3 stacks, utterly" +
+            " annihilate your opponent.";
         characterName.text = "Scholar";
 
         selectCharacterButton.GetComponent<Button>().onClick.AddListener(Char10);

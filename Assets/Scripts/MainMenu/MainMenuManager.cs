@@ -28,10 +28,10 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     private bool isConnecting = false;
 
-    public static int winCount, loseCount, drawCount;
+    public static int winCount, loseCount;
 
     // Change this value if/when the game is updated. Players on different versions cannot play w/ each other.
-    private const string gameVersion = "0.1";
+    private const string gameVersion = "1.1";
     private const int maxPlayers = 2;
 
     private void Awake()
@@ -67,7 +67,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     {
         winCount = 0;
         loseCount = 0;
-        drawCount = 0;
 
         if(PlayerPrefs.HasKey("Wins"))
         {
@@ -77,12 +76,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         {
             loseCount = PlayerPrefs.GetInt("Losses");
         }
-        if(PlayerPrefs.HasKey("Draws"))
-        {
-            drawCount = PlayerPrefs.GetInt("Draws");
-        }
-        winLossText.text = "<color=#1FBF00>Wins: " + winCount + "</color>\n<color=red>Losses: " + loseCount + "</color>\n" +
-            "Draws: " + drawCount;
+
+        winLossText.text = "<color=#1FBF00>Wins: " + winCount + "</color>\n<color=red>Losses: " + loseCount + "</color>\n";
     }
 
     // Called when the Find Opponent Button is clicked. Uses tweens to remove all UI elements and then begins searching
