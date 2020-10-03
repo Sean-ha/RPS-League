@@ -32,8 +32,8 @@ public class ChoseCharacter : MonoBehaviour
     {
         SetDescriptionPanel();
         characterImage.GetComponent<Image>().sprite = characterSpriteList[1];
-        abilityDescription.text = "Every round, acquire 1 stack of TERROR.\nUpon winning with SCISSORS, consume all of your " +
-            "stacks and heal yourself for that amount.\nThis cannot overheal.";
+        abilityDescription.text = "Every round, acquire 1 stack of TERROR.\nUpon winning with SCISSORS, use all of your " +
+            "stacks and heal for that amount.\nThis cannot overheal. This can be activated only once per game.";
         characterName.text = "Creature";
 
         selectCharacterButton.GetComponent<Button>().onClick.AddListener(Char1);

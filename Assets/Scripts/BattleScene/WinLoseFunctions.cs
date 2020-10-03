@@ -8,10 +8,11 @@ public class WinLoseFunctions : MonoBehaviour
     public string loseText;
     public string drawText;
 
-    public static int scholarCount;
-    public static int executionerCount;
-    public static bool phoenixRevived;
-    public static int creatureCount;
+    public int scholarCount;
+    public int executionerCount;
+    public bool phoenixRevived;
+    public int creatureCount;
+    public bool creatureHealed;
 
     private void Start()
     {
@@ -23,6 +24,7 @@ public class WinLoseFunctions : MonoBehaviour
         executionerCount = 0;
         phoenixRevived = false;
         creatureCount = 0;
+        creatureHealed = false;
     }
 
     // Each id corresponds to a different character's win function.
@@ -39,7 +41,7 @@ public class WinLoseFunctions : MonoBehaviour
         {
             creatureCount++;
             // If you used scissors and you have more than 1 stack of TERROR
-            if (winnerChoice == 3)
+            if (winnerChoice == 3 && !creatureHealed)
             {
                 winnerManager.health += creatureCount;
                 if (winnerManager.health > 10)
@@ -48,6 +50,7 @@ public class WinLoseFunctions : MonoBehaviour
                 }
                 winText = screenName + " heals for " + creatureCount + " health.";
                 creatureCount = 0;
+                creatureHealed = true;
             }
             return 2;
         }
@@ -92,7 +95,7 @@ public class WinLoseFunctions : MonoBehaviour
             if (winnerChoice != 3)
             {
                 winText = screenName + " loses 1 health to deal +2 damage.";
-                winnerManager.health -= 1;
+                winnerManager.health -= 2;
                 return 4;
             }
             else

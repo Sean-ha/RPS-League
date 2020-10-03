@@ -22,7 +22,7 @@ public class WallpaperMove : MonoBehaviour
         if(goingUp)
         {
             rectTransform.anchoredPosition = new Vector2(0, positionY - 0.5f);
-            if(positionY <= -900)
+            if(positionY <= -870)
             {
                 goingUp = false;
             }
@@ -31,7 +31,7 @@ public class WallpaperMove : MonoBehaviour
         else
         {
             rectTransform.anchoredPosition = new Vector2(0, positionY + 0.5f);
-            if(positionY >= 100)
+            if(positionY >= 60)
             {
                 goingUp = true;
             }
